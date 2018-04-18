@@ -28,7 +28,7 @@ public class SoundToggleScript : MonoBehaviour
         SceneManager.LoadScene("Game");
     }
 
-    public void ChangeVolume()
+    public void ChangeVolume() 
     {
         if (isPlaying)
         {
