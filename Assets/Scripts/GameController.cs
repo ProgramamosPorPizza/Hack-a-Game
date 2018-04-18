@@ -13,10 +13,10 @@ public class GameController : MonoBehaviour {
 
 	public Text descriptionText;
 
-	private Text sightText;
-	private Text hearText;
-	private Text smellText;
-	private Text touchText;
+	public Text sightText;
+	public Text hearText;
+	public Text smellText;
+	public Text touchText;
 
 	/* DATA */
 	private List<Chamber> chambers;
@@ -25,13 +25,7 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		// TODO: Game initialization goes here.
-		sightText = sightButton.GetComponentsInChildren<Text>()[0];
-		hearText = hearButton.GetComponentsInChildren<Text>()[0];
-		smellText = smellButton.GetComponentsInChildren<Text>()[0];
-		touchText = touchButton.GetComponentsInChildren<Text>()[0];
-
-		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a good idea.", "Sight", "Hearing", "Smell", "Touch");
+		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a good idea.", "Darkness.", "You don't hear anything.", "Smells... damp?", "The walls are wet. It's not pleasant.");
 
 		ShowChamber (testChamber);
 		print ("Initializing chamber");

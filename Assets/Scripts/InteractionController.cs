@@ -16,7 +16,8 @@ public class InteractionController : MonoBehaviour {
 	}
 
 	public void ButtonClicked(Button b) {
-		b.GetComponent<SenseTextController>().ShowHint ();
+		SenseTextController t = b.transform.GetChild (0).GetComponent<SenseTextController>();
+		t.ShowHint ();
 	}
 
 }
