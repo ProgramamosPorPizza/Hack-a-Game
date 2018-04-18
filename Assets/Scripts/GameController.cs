@@ -1,9 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameController : MonoBehaviour {
 
+	/* GUI */
+	public Button sightButton;
+	public Button hearButton;
+	public Button smellButton;
+	public Button touchButton;
+
+	public Text descriptionText;
+
+	private Text sightText;
+	private Text hearText;
+	private Text smellText;
+	private Text touchText;
+
+	/* DATA */
 	private List<Chamber> chambers;
 	private Chamber currentChamber;
 
@@ -11,8 +26,15 @@ public class GameController : MonoBehaviour {
 	void Start () {
 
 		// TODO: Game initialization goes here.
-		Chamber testChamber = new Chamber ("Description", "Sight", "Hearing", "Smell", "Touch");
-		chambers.Add (testChamber);
+		sightText = sightButton.GetComponentsInChildren<Text>()[0];
+		hearText = hearButton.GetComponentsInChildren<Text>()[0];
+		smellText = smellButton.GetComponentsInChildren<Text>()[0];
+		touchText = touchButton.GetComponentsInChildren<Text>()[0];
+
+		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a good idea.", "Sight", "Hearing", "Smell", "Touch");
+
+		ShowChamber (testChamber);
+		print ("Initializing chamber");
 
 	}
 
@@ -23,6 +45,28 @@ public class GameController : MonoBehaviour {
 
 	// Parse all permanent storage data from JSON files
 	private void ParseDataFromJSON() {
+
+	}
+
+	private void ShowChamber(Chamber chamber) {
+
+		// Set chamber as current chamber
+		this.currentChamber = chamber;
+
+		// Update description
+		this.descriptionText.GetComponent<SenseTextController>().Write(currentChamber.GetDescription());
+
+		// Hide all hints
+		this.sightText.GetComponent<SenseTextController>().HideHint();
+		this.hearText.GetComponent<SenseTextController>().HideHint();
+		this.smellText.GetComponent<SenseTextController>().HideHint();
+		this.touchText.GetComponent<SenseTextController>().HideHint();
+
+		// Update hint info
+		this.sightText.GetComponent<SenseTextController>().SetHint(currentChamber.GetSight());
+		this.hearText.GetComponent<SenseTextController>().SetHint(currentChamber.GetHear());
+		this.smellText.GetComponent<SenseTextController>().SetHint(currentChamber.GetSmell());
+		this.touchText.GetComponent<SenseTextController>().SetHint(currentChamber.GetTouch());
 
 	}
 
@@ -61,25 +105,47 @@ public class Chamber {
 
 	}
 
+	public string GetDescription() {
+		return this.description;
+	}
+
 	/* USE SENSES */
 
-	private string UseSight() {
+	public string UseSight() {
 		ActionPerformed ();
 		return this.sight.GetText ();
 	}
 
-	private string UseHear() {
+	public string UseHear() {
 		ActionPerformed ();
 		return this.hear.GetText ();
 	}
 
-	private string UseSmell() {
+	public string UseSmell() {
 		ActionPerformed ();
 		return this.smell.GetText ();
 	}
 
-	private string UseTouch() {
+	public string UseTouch() {
 		ActionPerformed ();
+		return this.touch.GetText ();
+	}
+
+	/* GET SENSES */
+
+	public string GetSight() {
+		return this.sight.GetText ();
+	}
+
+	public string GetHear() {
+		return this.hear.GetText ();
+	}
+
+	public string GetSmell() {
+		return this.smell.GetText ();
+	}
+
+	public string GetTouch() {
 		return this.touch.GetText ();
 	}
 
