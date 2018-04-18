@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class InteractionController : MonoBehaviour {
 
@@ -19,5 +20,10 @@ public class InteractionController : MonoBehaviour {
 		SenseTextController t = b.transform.GetChild (0).GetComponent<SenseTextController>();
 		t.ShowHint ();
 	}
+
+    public void ButtonBackClicked()
+    {
+        SceneManager.LoadScene("Main");
+    }
 
 }
