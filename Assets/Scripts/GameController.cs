@@ -28,9 +28,13 @@ public class GameController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a good idea.", "Darkness.", "You don't hear anything.", "Smells... damp?", "The walls are wet. It's not pleasant.");
+		Chamber testChamber1 = new Chamber ("You enter a chamber and step on a puddle.", "You light a match. You see the water level is rising.", "You hear water droplets.", "You can definitely smell mold.", "You feel the water level rising up your legs.", null, null);
+		Chamber testChamber2 = new Chamber ("You enter a chamber. You can feel a light breeze.", "Darkness.", "You can almost make out the sound of wind.", "You can't smell anything.", "Yep, what you feel is definitely air.", null, null);
+
+		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a great idea.", "Darkness.", "You don't hear anything in particular.", "Smells... damp?", "The walls are wet. It's not pleasant.", testChamber1, testChamber2);
 
 		ShowChamber (testChamber);
+
 		print ("Initializing chamber");
 
 	}
@@ -67,6 +71,14 @@ public class GameController : MonoBehaviour {
 
 	}
 
+	public void GoToLeft() {
+		ShowChamber (currentChamber.GetLeftChamber ());
+	}
+
+	public void GoToRight() {
+		ShowChamber (currentChamber.GetLeftChamber ());
+	}
+
 }
 
 // Class defining an individual Chamber.
@@ -91,7 +103,7 @@ public class Chamber {
 	private Chamber rightChamber;
 	private Chamber leftChamber;
 
-	public Chamber (string description, string sightText, string hearText, string smellText, string touchText) {
+	public Chamber (string description, string sightText, string hearText, string smellText, string touchText, Chamber left, Chamber right) {
 
 		this.description = description;
 
@@ -99,6 +111,9 @@ public class Chamber {
 		this.hear = new Sense (hearText);
 		this.smell = new Sense (smellText);
 		this.touch = new Sense (touchText);
+
+		this.leftChamber = left;
+		this.rightChamber = right;
 
 	}
 
@@ -148,11 +163,11 @@ public class Chamber {
 
 	/* TRAVELING */
 
-	private Chamber GetRightChamber() {
+	public Chamber GetRightChamber() {
 		return this.rightChamber;
 	}
 
-	private Chamber GetLeftChamber() {
+	public Chamber GetLeftChamber() {
 		return this.leftChamber;
 	}
 
