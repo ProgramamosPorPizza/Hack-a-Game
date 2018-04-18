@@ -5,11 +5,12 @@ using UnityEngine.SceneManagement;
 
 public class WinScript : MonoBehaviour
 {
+    bool winlost;
+    string mensaje;
 
     // Use this for initialization
     void Start()
     {
-
     }
 
 

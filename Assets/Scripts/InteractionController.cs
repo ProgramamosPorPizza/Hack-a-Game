@@ -10,11 +10,6 @@ public class InteractionController : MonoBehaviour {
 	void Start () {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
 	public void ButtonClicked(Button b) {
 		SenseTextController t = b.transform.GetChild (0).GetComponent<SenseTextController>();

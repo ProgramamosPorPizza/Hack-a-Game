@@ -41,4 +41,11 @@ public class SoundToggleScript : MonoBehaviour
             isPlaying = true;
         }
     }
+
+
+    public void ButtonOutPressed()
+    {
+        Application.Quit();
+    }
+
 }
