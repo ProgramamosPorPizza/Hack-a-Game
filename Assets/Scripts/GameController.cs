@@ -18,6 +18,9 @@ public class GameController : MonoBehaviour {
 	public Text smellText;
 	public Text touchText;
 
+	public Button rightChamberButton;
+	public Button leftChamberButton;
+
 	/* DATA */
 	private List<Chamber> chambers;
 	private Chamber currentChamber;
