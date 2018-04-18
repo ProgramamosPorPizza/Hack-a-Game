@@ -46,6 +46,10 @@ public class Chamber {
 	// Stats
 	private int nActionsPerformed;
 
+	// Travel
+	private Chamber rightChamber;
+	private Chamber leftChamber;
+
 	public Chamber (string description, string sightText, string hearText, string smellText, string touchText) {
 
 		this.description = description;
@@ -60,23 +64,33 @@ public class Chamber {
 	/* USE SENSES */
 
 	private string UseSight() {
-		this.sight.GetText ();
 		ActionPerformed ();
+		return this.sight.GetText ();
 	}
 
-	private void UseHear() {
-		this.hear.GetText ();
+	private string UseHear() {
 		ActionPerformed ();
+		return this.hear.GetText ();
 	}
 
-	private void UseSmell() {
-		this.smell.GetText ();
+	private string UseSmell() {
 		ActionPerformed ();
+		return this.smell.GetText ();
 	}
 
-	private void UseTouch() {
-		this.touch.GetText ();
+	private string UseTouch() {
 		ActionPerformed ();
+		return this.touch.GetText ();
+	}
+
+	/* TRAVELING */
+
+	private Chamber GetRightChamber() {
+		return this.rightChamber;
+	}
+
+	private Chamber GetLeftChamber() {
+		return this.leftChamber;
 	}
 
 	/* USE ITEMS */
