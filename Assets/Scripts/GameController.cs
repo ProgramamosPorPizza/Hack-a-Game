@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour {
 
+	/* GUI */
+	public GUIText sightGUIText;
+	public GUIText hearGUIText;
+	public GUIText smellGUIText;
+	public GUIText touchGUIText;
+
+	/* DATA */
 	private List<Chamber> chambers;
 	private Chamber currentChamber;
 
@@ -14,6 +21,8 @@ public class GameController : MonoBehaviour {
 		Chamber testChamber = new Chamber ("Description", "Sight", "Hearing", "Smell", "Touch");
 		chambers.Add (testChamber);
 
+		ShowChamber (testChamber);
+
 	}
 
 	// Update is called once per frame
@@ -23,6 +32,19 @@ public class GameController : MonoBehaviour {
 
 	// Parse all permanent storage data from JSON files
 	private void ParseDataFromJSON() {
+
+	}
+
+	private void ShowChamber(Chamber chamber) {
+
+		// Set chamber as current chamber
+		this.currentChamber = chamber;
+
+		// Hide all hints
+		this.sightGUIText.GetComponent<SenseTextController>().HideHint();
+		this.hearGUIText.GetComponent<SenseTextController>().HideHint();
+		this.smellGUIText.GetComponent<SenseTextController>().HideHint();
+		this.touchGUIText.GetComponent<SenseTextController>().HideHint();
 
 	}
 
@@ -63,22 +85,22 @@ public class Chamber {
 
 	/* USE SENSES */
 
-	private string UseSight() {
+	public string UseSight() {
 		ActionPerformed ();
 		return this.sight.GetText ();
 	}
 
-	private string UseHear() {
+	public string UseHear() {
 		ActionPerformed ();
 		return this.hear.GetText ();
 	}
 
-	private string UseSmell() {
+	public string UseSmell() {
 		ActionPerformed ();
 		return this.smell.GetText ();
 	}
 
-	private string UseTouch() {
+	public string UseTouch() {
 		ActionPerformed ();
 		return this.touch.GetText ();
 	}
