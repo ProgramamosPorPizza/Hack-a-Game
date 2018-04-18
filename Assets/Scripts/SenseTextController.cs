@@ -35,7 +35,7 @@ public class SenseTextController : MonoBehaviour {
 	}
 
 	public void HideHint () {
-		uiText.text = "???";
+        Write("???");
 	}
 
 	public void Write(string str) {
