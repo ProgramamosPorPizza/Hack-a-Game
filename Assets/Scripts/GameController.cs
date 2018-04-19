@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -25,13 +24,28 @@ public class GameController : MonoBehaviour {
 	private List<Chamber> chambers;
 	private Chamber currentChamber;
 
+	private int ch = 0;
+	private int cerillas = 16;
+    
+    private int sightTimes = 1;
+    private int hearTimes = 1;
+    private int smellTimes = 1;
+    private int touchTimes = 1;
+
+    private bool deathState = false;
+
+    public Text cerillaCounter;
+
 	// Use this for initialization
 	void Start () {
 
-		Chamber testChamber1 = new Chamber ("You enter a chamber and step on a puddle.", "You light a match. You see the water level is rising.", "You hear water droplets.", "You can definitely smell mold.", "You feel the water level rising up your legs.", null, null);
-		Chamber testChamber2 = new Chamber ("You enter a chamber. You can feel a light breeze.", "Darkness.", "You can almost make out the sound of wind.", "You can't smell anything.", "Yep, what you feel is definitely air.", null, null);
+        cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+		chambers = new List<Chamber>();
 
-		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a great idea.", "Darkness.", "You don't hear anything in particular.", "Smells... damp?", "The walls are wet. It's not pleasant.", testChamber1, testChamber2);
+		ParseCSV ();
+		print (chambers.Count);
+
+		Chamber testChamber = new Chamber ("You're stuck. Everything is dark. Maybe this wasn't such a great idea.", "Darkness.", "You don't hear anything in particular.", "Smells... damp?", "The walls are wet. It's not pleasant.", chambers[0], chambers[1]);
 
 		ShowChamber (testChamber);
 
@@ -42,10 +56,65 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        if (cerillas <= 0 && !deathState)
+        {
+            Chamber death = new Chamber("You ran out of matches. You die.", "You feel nothing", "You feel nothing", "You feel nothing", "You feel nothing", null, null);
+            ShowChamber(death);
+            cerillas = 0;
+            cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+            deathState = true;
+        }
+
 	}
 
-	// Parse all permanent storage data from JSON files
-	private void ParseDataFromJSON() {
+    public void ButtonClicked(Button b)
+    {
+        if (cerillas > 0) {
+            if (b.gameObject.name == "HearButton" && hearTimes > 0)
+            {
+                cerillas--;
+                hearTimes--;
+                cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+                SenseTextController t = b.transform.GetChild(0).GetComponent<SenseTextController>();
+                t.ShowHint();
+            }
+            else if(b.gameObject.name == "SmellButton" && smellTimes > 0)
+            {
+                cerillas--;
+                smellTimes--;
+                cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+                SenseTextController t = b.transform.GetChild(0).GetComponent<SenseTextController>();
+                t.ShowHint();
+            }
+            else if(b.gameObject.name == "TouchButton" && touchTimes > 0)
+            {
+                cerillas--;
+                touchTimes--;
+                cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+                SenseTextController t = b.transform.GetChild(0).GetComponent<SenseTextController>();
+                t.ShowHint();
+            }
+            else if (b.gameObject.name == "SightButton" && sightTimes > 0)
+            {
+                cerillas--;
+                sightTimes--;
+                cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+                SenseTextController t = b.transform.GetChild(0).GetComponent<SenseTextController>();
+                t.ShowHint();
+            }
+        }
+        else
+        {
+            cerillas = 0;
+            cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+            SenseTextController t = b.transform.GetChild(0).GetComponent<SenseTextController>();
+            t.ShowHint();
+        }
+    }
+
+
+    // Parse all permanent storage data from JSON files
+    private void ParseDataFromJSON() {
 
 	}
 
@@ -69,14 +138,60 @@ public class GameController : MonoBehaviour {
 		this.smellText.GetComponent<SenseTextController>().SetHint(currentChamber.GetSmell());
 		this.touchText.GetComponent<SenseTextController>().SetHint(currentChamber.GetTouch());
 
-	}
+        if (cerillas > 0)
+        {
+            cerillas--;
+            cerillaCounter.GetComponent<Text>().text = cerillas.ToString();
+        }
+
+        touchTimes = 1;
+        smellTimes = 1;
+        hearTimes = 1;
+        sightTimes = 1;
+    }
+
 
 	public void GoToLeft() {
-		ShowChamber (currentChamber.GetLeftChamber ());
+        if (!deathState)
+        {
+            ShowChamber(chambers[ch + 1]);
+            ch++;
+        }
 	}
 
 	public void GoToRight() {
-		ShowChamber (currentChamber.GetLeftChamber ());
+        if (!deathState)
+        {
+            ShowChamber(chambers[ch + 4]);
+            ch++;
+        }
+	}
+
+	// Parse all permanent storage data from CSV files
+	private void ParseCSV() {
+
+		List<Dictionary<string,object>> data = CSVReader.Read ("historiasoficial");
+
+		for(var i=0; i < data.Count; i++) {
+			string description = (string) data [i] ["description"];
+			string sight = (string) data [i] ["sight"];
+			string hear = (string) data [i] ["hear"];
+			string smell = (string) data [i] ["smell"];
+			string touch = (string) data [i] ["touch"];
+
+			Chamber c = new Chamber (description, sight, hear, smell, touch, null, null);
+			chambers.Add (c);
+
+		}
+
+		/*for (var i = 0; i < chambers.Count - 10; i++) {
+			chambers [0].setLeft (chambers[i + 1]);
+		}
+
+		for (var i = 0; i < chambers.Count; i++) {
+			chambers [0].setRight (chambers[i + 5]);
+		}*/
+
 	}
 
 }
@@ -115,6 +230,14 @@ public class Chamber {
 		this.leftChamber = left;
 		this.rightChamber = right;
 
+	}
+
+	public void setRight(Chamber r) {
+		this.rightChamber = r;
+	}
+
+	public void setLeft(Chamber l) {
+		this.leftChamber = l;
 	}
 
 	public string GetDescription() {
